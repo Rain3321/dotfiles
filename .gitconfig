@@ -1,0 +1,18 @@
+[alias]
+	l = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
+	co = checkout
+	rb = rebase -i
+	st = status
+	ci = commit
+	pl = pull --rebase
+	ps = push
+	ad = add
+	df = diff
+	br = branch
+	s = status -s
+	ch = "!git checkout $(git branch -vv | grep -v '^\\*' | fzf | awk '{print $1}')"
+	a = "!git add $(git status -s | fzf -m | awk '{print $2}')"
+	rcon = rebase --continue
+	cleanbranch = "!git branch -d $(git branch --merged | grep -v '^\\*\\|\\<master$')"
+	t = tag
+	td = tag -d
