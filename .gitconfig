@@ -1,9 +1,11 @@
 [alias]
 	l = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
-	co = checkout
+	co = checkout -b
 	rb = rebase -i
 	st = status
 	ci = commit
+	cm = commit -m
+	ca = commit --amend
 	pl = pull --rebase
 	ps = push
 	ad = add
@@ -15,7 +17,7 @@
             	_height=$(stty size | awk '{print $1}');\
             	git s | fzf -m --preview \"git diff {2} | head -n $_height | pygmentize\" | awk '{print $2}' | xargs git add; \
         }	; f"
-	rcon = rebase --continue
+	rc = rebase --continue
 	tag-refresh = "!# Re reference tag.;\n \
         	f() { \
             	_height=$(stty size | awk '{print $1}');\
@@ -29,22 +31,6 @@
         	--date=format:'%Y-%m-%d' \
         	--abbrev-commit \
         	--pretty=format:'%C(red)%H%C(auto)%d %s %C(green)(%cr)%C(bold blue) %an'"
-	branch-clean = "!# Search and delete merged branches.;\n\
-        	curr_hash=`git show -s | head -1 | cut -d ' ' -f2`; \
-        	for branch in `find .git/refs -type f | fzf --ansi -m --preview=\"cat {} | xargs git l\"` ; do \
-            	hash=`cat $branch`; \
-           	 if [ $hash = $curr_hash ]; then \
-                continue; \
-            	fi; \
-            	git ll | egrep $hash -C 1; \
-            	read -p \"Delete $branch? [y|n] \" -r; \
-            	REPLY=${REPLY:-"n"}; \
-            	if [ $REPLY = \"y\" ]; then \
-                rm $branch; \
-                echo \"\\033[32m$branch \\033[0mhas been\\033[31m deleted\\033[0m.\n\"; \
-            	fi; \
-        	done"
-    	b-c = "!git branch-clean"
 	df = "!# Print diff report.;\n\
         	fileA=/tmp/git-s-$(uuidgen); \
         	fileB=/tmp/git-diff-$(uuidgen); \
@@ -54,3 +40,10 @@
         	rm -f $fileA $fileB; \
     		"
 	bd = "!git branch -D $(git branch -vv | grep -v '^\\*' | fzf | awk '{print $1}')"
+	pt = "!# upstream tag force push with fzf;\n\
+			f() { \
+            	_height=$(stty size | awk '{print $1}');\
+            	tag_name=`git tag | fzf --preview=\"git l {1} | head -n $_height\" `; \
+            	echo $tag_name; \
+            	git push upstream $tag_name -f; \
+        	}; f"

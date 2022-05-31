@@ -167,7 +167,7 @@ do  -- app manager
     mode:bind({}, 'v', app_man:toggle('Visual Studio Code'))
     -- mode:bind({}, 'w', app_man:toggle('Microsoft Word'))
     mode:bind({}, 'z', app_man:toggle('zoom.us'))
-
+    mode:bind({}, 'y', app_man:toggle('YouTube Music'))
 
     -- mode:bind({'shift'}, 'tab', app_man.focusPreviousScreen)
     -- mode:bind({}, 'tab', app_man.focusNextScreen)

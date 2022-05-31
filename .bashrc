@@ -46,3 +46,5 @@ source $(which fav.sh)
 
 alias ll='ls -al'
 alias cl='clear'
+alias aws='saml2aws login --force --session-duration=28800'
+export PATH="$PATH:/Application/Visual Studio Code.app/Contents/Resources/app/bin"
