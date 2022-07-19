@@ -47,3 +47,8 @@
             	echo $tag_name; \
             	git push upstream $tag_name -f; \
         	}; f"
+	cw = "!# make WIP (work in process) commit; \n\
+		f() { \
+		git add .; \
+		git commit -m 'WIP'; \
+		}; f"
