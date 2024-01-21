@@ -21,7 +21,7 @@ function obj:toggle(name, secondName)
 
         local screen = hs.window.focusedWindow():frame()
         local pt = hs.geometry.rectMidPoint(screen)
-        hs.mouse.setAbsolutePosition(pt)
+        hs.mouse.absolutePosition(pt)
         app_mode.triggered = true
     end
 end
@@ -35,7 +35,7 @@ local function focusScreen(screen)
 
   -- Move mouse to center of screen
   local center = hs.geometry.rectMidPoint(screen:fullFrame())
-  hs.mouse.setAbsolutePosition(center)
+  hs.mouse.absolutePosition(center)
 end
 
 function obj.focusPreviousScreen()

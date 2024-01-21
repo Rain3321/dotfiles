@@ -1,4 +1,10 @@
+[user]
+	name = baro
+	email = baro.gagi@kakaopaycorp.com
+	password = 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
+
 [alias]
+	cp = cherry-pick
 	l = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
 	co = checkout -b
 	rb = rebase -i
@@ -13,11 +19,12 @@
 	s = status -s
 	ch = "!git checkout $(git branch -vv | grep -v '^\\*' | fzf | awk '{print $1}')"
 	a = "! # add files with fzf preview diffs; \n\
-        	f() { \
-            	_height=$(stty size | awk '{print $1}');\
-            	git s | fzf -m --preview \"git diff {2} | head -n $_height | pygmentize\" | awk '{print $2}' | xargs git add; \
-        }	; f"
+	     git diff-select | xargs git add"
+	m = "! # select staged files and unstage them ;\n\
+	     git diff-unselect | xargs git reset HEAD"
 	rc = rebase --continue
+	rbb = "!# rebase branch.; \n \
+	       git rebase --rebase-merges $(git branch -vv | grep -v '^\\*' | fzf | awk '{print $1}')"
 	tag-refresh = "!# Re reference tag.;\n \
         	f() { \
             	_height=$(stty size | awk '{print $1}');\
@@ -39,7 +46,7 @@
         	join -t' ' -a 1 $fileA $fileB | awk '{print $2, \"(+\"$3 \",-\"$4\")\", $1}' | sed 's/(+,-)/./; s/^\\([^?]\\) *\\./\\1 STAGED/' | column -t -s' ' ; \
         	rm -f $fileA $fileB; \
     		"
-	bd = "!git branch -D $(git branch -vv | grep -v '^\\*' | fzf | awk '{print $1}')"
+	bd = "!git branch -D $(git branch -vv | grep -v '^\\*' | fzf -m | awk '{print $1}')"
 	pt = "!# upstream tag force push with fzf;\n\
 			f() { \
             	_height=$(stty size | awk '{print $1}');\
@@ -52,3 +59,29 @@
 		git add .; \
 		git commit -m 'WIP'; \
 		}; f"
+	roll-back = "!# WIP commit rollback; \n\
+		     git reset HEAD~"
+    	diff-select = "!# Select changed files to add them.;\n\
+        	f() { \
+            	git df \
+            	| egrep -v '[^?] *STAGED ' \
+            	| fzf -m --header \"$(git diff --shortstat)\" --preview \
+             	   \"if [[ {1} == '??' ]]; then bat {3}; else git diff --color=always {3}; fi\" \
+            	| awk '{print $3}'; \
+        	}; f"
+    	diff-unselect = "!# Select staged files to unstage them.;\n\
+        	f() { \
+            	git df \
+            	| egrep '[^?] *STAGED ' \
+            	| fzf -m --header \"$(git diff --shortstat)\" --preview \
+            	    \"if [[ {1} == '??' ]]; then pygmentize {3}; else git diff --color=always --cached {3}; fi\" \
+            	| awk '{print $3}'; \
+        	}; f"
+    	unstage = "!# Select staged files and Unstage them.;\n\
+       		git diff-unselect | xargs git reset HEAD"
+    merge-branch = "!git merge --no-ff $(git branch -vv | grep -v '^\\*' | fzf -m | awk '{print $1}')"
+    dmb = "!git fetch -p && git branch -vv | grep ': gone' | awk '{print $1}' | grep -Ev '(^\\*|master|beta|sandbox)' | xargs git branch -D"
+[core]
+	editor = vim
+[init]
+	defaultBranch = master

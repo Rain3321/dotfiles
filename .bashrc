@@ -42,9 +42,20 @@ ${B_BLUE}\w \
 ${COLOR_END}\
 \$(gbr)\n\$ "
 
-source $(which fav.sh)
-
 alias ll='ls -al'
 alias cl='clear'
-alias aws='saml2aws login --force --session-duration=28800'
+alias ku='kubectl'
+alias ws='cd ~/ws'
+alias java-change='jenv local $(jenv versions | fzf)'
+alias f='open .'
+alias vim='nvim'
+alias vi='nvim'
+source /opt/homebrew/bin/fav.sh
+
+# vdi alias
+
+alias ext="open -n 'vmware-view://baro.gagi@vdi-ext.kakaopaycorp.net/'"
+alias issue="open -n 'vmware-view://baro.gagi@vdi-issue.kakaopaycorp.net/'"
+
 export PATH="$PATH:/Application/Visual Studio Code.app/Contents/Resources/app/bin"
+

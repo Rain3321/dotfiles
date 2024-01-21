@@ -1,5 +1,16 @@
 hs.hotkey.bind({'option', 'cmd'}, 'r', hs.reload)
 
+-- 키보드 매핑 (카라비너 대체)
+local fRemap = require('modules.foundation_remapping')
+local remapper = fRemap.new()
+remapper:remap('capslock', 'f18')
+remapper:remap('rshift' ,'f17')
+remapper:remap('ropt', 'f14')
+remapper:remap('rcmd', 'f14')
+remapper:remap('end', 'f13')
+-- remapper:remap('escape', 'f16')
+remapper:register()
+-- end
 
 local app_mode = hs.hotkey.modal.new()
 local tap_mode = hs.hotkey.modal.new()
@@ -145,29 +156,34 @@ do  -- app manager
 
     mode:bind({}, ',', app_man:toggle('System Preferences'))
     mode:bind({}, '/', app_man:toggle('Activity Monitor'))
-    mode:bind({}, 'a', app_man:toggle('Authy Desktop'))
+    -- mode:bind({}, 'a', app_man:toggle('Authy Desktop'))
     -- mode:bind({}, 'b', app_man:toggle('DBeaver'))
     mode:bind({}, 'c', app_man:toggle('Google Chrome'))
     -- mode:bind({}, 'd', app_man:toggle('Docker'))
     -- mode:bind({'option'}, 'd', app_man:toggle('Discord'))
     mode:bind({}, 'e', app_man:toggle('Finder'))
     -- mode:bind({}, 'f', app_man:toggle('Firefox'))
-    mode:bind({}, 'g', app_man:toggle('DataGrip'))
+    -- mode:bind({}, 'g', app_man:toggle('DataGrip'))
+    -- mode:bind({}, 'd', app_man:toggle('MYSQLWorkbench'))
+    -- mode:bind({}, 'd', app_man:toggle('Docker Desktop'))
     mode:bind({}, 'i', app_man:toggle('IntelliJ IDEA'))
-    mode:bind({}, 'k', app_man:toggle('KakaoTalk'))
+    -- mode:bind({}, 'k', app_man:toggle('KakaoTalk'))
     -- mode:bind({}, 'n', app_man:toggle('Notes'))
-    mode:bind({}, 'n', app_man:toggle('Notion'))
+    -- mode:bind({}, 'n', app_man:toggle('Notion'))
     mode:bind({}, 'p', app_man:toggle('Postman'))
     -- mode:bind({}, 'r', app_man:toggle('Trello'))
     --  mode:bind({}, 'r', app_man:toggle('draw.io'))
     mode:bind({}, 's', app_man:toggle('Slack'))
-    -- mode:bind({}, 'space', app_man:toggle('Terminal'))
+    mode:bind({}, 'space', app_man:toggle('Terminal'))
     -- mode:bind({}, 'space', app_man:toggle('iTerm'))
     -- mode:bind({}, 'v', app_man:toggle('VimR'))
     mode:bind({}, 'v', app_man:toggle('Visual Studio Code'))
+    mode:bind({'shift'}, 'v', app_man:toggle('VMware Horizon Client'))
     -- mode:bind({}, 'w', app_man:toggle('Microsoft Word'))
     mode:bind({}, 'z', app_man:toggle('zoom.us'))
-    mode:bind({}, 'y', app_man:toggle('YouTube Music'))
+    -- mode:bind({}, 'y', app_man:toggle('YouTube Music'))
+    mode:bind({}, 'o', app_man:toggle('Obsidian'))
+    mode:bind({}, 'g', app_man:toggle('GitKraken'))
 
     -- mode:bind({'shift'}, 'tab', app_man.focusPreviousScreen)
     -- mode:bind({}, 'tab', app_man.focusNextScreen)
@@ -189,6 +205,23 @@ do  -- app manager
     end)
 end
 
+local app_map = {
+	{ key = 'c', mod = {}, app = 'Google Chrome'},
+	{ key = 'e', mod = {}, app = 'Finder'},
+	{ key = 's', mod = {}, app = 'Slack'},
+	{ key = 'd', mod = {}, app = 'MYSQLWorkbench'},
+	{ key = 'g', mod = {}, app = 'GitKraken'},
+	{ key = 'i', mod = {}, app = 'IntelliJ IDEA'},
+	{ key = 'p', mod = {}, app = 'Postman'},
+	{ key = 'v', mod = {}, app = 'Visual Studio Code'},
+	{ key = 'v', mod = {'shift'}, app = 'VMware Horizon Client'},
+	{ key = 'space', mode = {}, app = 'Terminal'},
+	{ key = 'z', mod = {}, app = 'zoom.us'},
+	{ key = 'o', mod = {}, app = 'Obsidian'},
+	{ key = '/', mod = {}, app = 'Activiry Monitor'},
+        { key = ',', mod = {}, app = 'System Preferences'},
+}
+
 do  -- winmove
     local win_move = require('modules.winmove')
     local mode = app_mode
@@ -200,16 +233,71 @@ do  -- winmove
     mode:bind({}, '3', win_move.right_bottom)
     mode:bind({}, '4', win_move.left)
     mode:bind({'shift'}, '4', win_move.move(0, 0, 2/3, 1))
+    mode:bind({'ctrl'}, '4', win_move.move(0, 0, 1/3, 1))
     mode:bind({}, '5', win_move.full_screen)
     mode:bind({}, '6', win_move.right)
     mode:bind({'shift'}, '6', win_move.move(1/3, 0, 2/3, 1))
+    mode:bind({'ctrl'}, '6', win_move.move(2/3, 0, 1/3, 1))
     mode:bind({}, '7', win_move.left_top)
     mode:bind({}, '8', win_move.top)
     mode:bind({}, '9', win_move.right_top)
     mode:bind({}, '-', win_move.prev_screen)
-    mode:bind({}, '=', win_move.next_screen)
+     mode:bind({}, '=', win_move.next_screen)
     -- mode:bind({}, 'left', win_move.move_relative(-10, 0), function() end, win_move.move_relative(-10, 0))
     -- mode:bind({}, 'right', win_move.move_relative(10, 0), function() end, win_move.move_relative(10, 0))
     -- mode:bind({}, 'up', win_move.move_relative(0, -10), function() end, win_move.move_relative(0, -10))
     -- mode:bind({}, 'down', win_move.move_relative(0, 10), function() end, win_move.move_relative(0, 10))
 end
+
+require('modules.vim')
+
+function mod_key(tb)
+    if 'table' ~= type(tb) then
+        return ''
+    end
+    found = ''
+    for _, v in pairs(tb) do
+        found = found..v
+    end 
+    if found == '' then
+    	return ''
+    end 
+    return found..'+'
+end 
+
+hs.hotkey.bind({}, 'F15', function ()
+-- 	local help_string = ''
+--	for _, value in next, app_map do
+--		help_string = help_string..(mod_key(value["mod"])..value["key"] .. " : " .. value["app"].. "\n")
+--	end
+--	hs.alert.show(help_string, 5)
+    hs.alert.showWithImage('', hs.image.imageFromPath('~/Downloads/vim2.webp'), 5)
+end)
+
+
+-- vim esc to English
+local caps_mode = hs.hotkey.modal.new()
+local inputEnglish = "com.apple.keylayout.ABC"
+
+
+local on_caps_mode = function()
+    caps_mode:enter()
+end
+
+local off_caps_mode = function()
+    caps_mode:exit()
+
+    local input_source = hs.keycodes.currentSourceID()
+    
+
+    if not (input_source == inputEnglish) then
+        hs.eventtap.keyStroke({}, 'right')
+        hs.keycodes.currentSourceID(inputEnglish)
+        hs.eventtap.keyStroke({}, 'escape')
+    end
+
+    hs.eventtap.keyStroke({},'escape')
+
+end
+
+hs.hotkey.bind({}, 'f16', on_caps_mode, off_caps_mode)
