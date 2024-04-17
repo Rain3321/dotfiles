@@ -12,8 +12,9 @@
 	ci = commit
 	cm = commit -m
 	ca = commit --amend
-	pl = pull --rebase
-	ps = push
+    pl = pull --rebase
+    ps = push
+    psu = "!git push -u upstream $(git branch | grep '^\\*' | awk '{print $2}')"
 	ad = add
 	br = branch
 	s = status -s
@@ -80,8 +81,19 @@
     	unstage = "!# Select staged files and Unstage them.;\n\
        		git diff-unselect | xargs git reset HEAD"
     merge-branch = "!git merge --no-ff $(git branch -vv | grep -v '^\\*' | fzf -m | awk '{print $1}')"
+    mg = "!git merge-branch"
     dmb = "!git fetch -p && git branch -vv | grep ': gone' | awk '{print $1}' | grep -Ev '(^\\*|master|beta|sandbox)' | xargs git branch -D"
 [core]
 	editor = vim
 [init]
 	defaultBranch = master
+[push]
+	default = current
+[rerere]
+	enabled = true
+[diff]
+	algorithm = histogram
+[merge]
+	conflictstyle = zdiff3
+[branch]
+	sort = -committerdate

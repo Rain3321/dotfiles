@@ -58,4 +58,4 @@ alias ext="open -n 'vmware-view://baro.gagi@vdi-ext.kakaopaycorp.net/'"
 alias issue="open -n 'vmware-view://baro.gagi@vdi-issue.kakaopaycorp.net/'"
 
 export PATH="$PATH:/Application/Visual Studio Code.app/Contents/Resources/app/bin"
-
+export NODE_EXTRA_CA_CERTS="/Users/baro.gagi/Downloads/MenloSecurityCustomerRootCA.crt"
